@@ -110,6 +110,7 @@ void usercontrol(void) {
     
     // Apply to motors
     if (axisRotate != 0) {
+      // if slowly rotating
       MotorGroupLeft.setVelocity(axisRotate * slowRotateConst, percent);
       MotorGroupRight.setVelocity(axisRotate * slowRotateConst * -1, percent); 
     } else {
