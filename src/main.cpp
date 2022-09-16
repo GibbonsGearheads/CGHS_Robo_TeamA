@@ -18,6 +18,10 @@ bool isInCompetition;
 brain Brain;
 controller Controller;
 
+// Controller Screen Variables
+int drawControllerInterval = 0;
+bool drawControllerBool = false;
+
 // Left Motors and Motor Group
 motor MotorLeftFront = motor(PORT1, ratio18_1, true);
 motor MotorLeftBack = motor(PORT2, ratio18_1, true);
@@ -59,6 +63,26 @@ float ProcessAxis(float input) {
   return result;
 }
 
+void DrawControllerScreen() {
+
+  if (!drawControllerBool)
+  {
+    return;
+  }
+  
+  // clear screen
+  Controller.Screen.clearScreen();
+  // display left axis percent
+  Controller.Screen.setCursor(1,1);
+  Controller.Screen.print("Left Axis: ");
+  Controller.Screen.print(axisLeft);
+  // display right axis percent
+  Controller.Screen.setCursor(2,1);
+  Controller.Screen.print("Right Axis: ");
+  Controller.Screen.print(axisRight);
+}
+
+
 void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
@@ -86,6 +110,13 @@ void usercontrol(void) {
     MotorGroupLeft.spin(fwd, axisLeft, percent);
     MotorGroupLeft.spin(fwd, axisLeft, percent);
 
+    // draw controller
+    if (drawControllerInterval >= 2)
+    {
+      DrawControllerScreen();
+      drawControllerInterval = 0;
+    }
+    drawControllerInterval++;
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
@@ -104,13 +135,13 @@ int main() {
   pre_auton();
 
   // Check if in actual competition
+  Brain.Screen.clearScreen();
+  Brain.Screen.setCursor(1, 1);
+  Brain.Screen.print("IN COMPETITION? = ");
   if (!isInCompetition)
   {
     usercontrol();
   }
-  Brain.Screen.setCursor(0, 1);
-  Brain.Screen.print("IN COMPETITION? = ");
-
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
