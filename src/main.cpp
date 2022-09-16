@@ -61,6 +61,14 @@ float ProcessAxis(float input) {
   {
     result = 0;
   }
+  if (result <= -95)
+  {
+    result = -100;
+  }
+  if (result >= 95)
+  {
+    result = 100;
+  }
   
   return result;
 }
