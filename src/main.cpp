@@ -99,6 +99,7 @@ int main() {
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
+  //test
   // Run the pre-autonomous function.
   pre_auton();
 
