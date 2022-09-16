@@ -57,10 +57,12 @@ void pre_auton(void) {
 float ProcessAxis(float input) {
 
   float result = input;
+  //   set to zero if close enough to zero (for sensitive controllers)
   if (result <= 5 && result >= -5)
   {
     result = 0;
   }
+  // set to max if basically at max
   if (result <= -95)
   {
     result = -100;
