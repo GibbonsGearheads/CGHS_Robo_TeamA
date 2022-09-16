@@ -43,6 +43,8 @@ float axisRight;
 float axisStrafe;
 float axisRotate;
 
+float slowRotateConst = 0.2;
+
 void pre_auton(void) {
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
@@ -105,10 +107,18 @@ void usercontrol(void) {
     axisStrafe = ProcessAxis(axisStrafe_Raw);
     axisRotate = ProcessAxis(axisRotate_Raw);
 
-
+    
     // Apply to motors
-    MotorGroupLeft.spin(fwd, axisLeft, percent);
-    MotorGroupLeft.spin(fwd, axisLeft, percent);
+    if (axisRotate != 0) {
+      MotorGroupLeft.setVelocity(axisRotate * slowRotateConst, percent);
+      MotorGroupRight.setVelocity(axisRotate * slowRotateConst * -1, percent); 
+    } else {
+      // If nothing else, set velocity as normal
+      MotorGroupLeft.setVelocity(axisLeft, percent);
+      MotorGroupRight.setVelocity(axisRight, percent);
+    }
+    MotorGroupLeft.spin(fwd);
+    MotorGroupRight.spin(fwd);
 
     // draw controller
     if (drawControllerInterval >= 2)
